@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# sync-ftp - Sync files from current directory to FTP using lftp
+# sync-sftp - Sync files from current directory to SFTP using lftp
 
 if [ $# -eq 0 ] ; then
   echo "Usage: $0 [-p|--password password] user@host [remotedir]" >&2
