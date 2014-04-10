@@ -3,16 +3,21 @@
 # sync-sftp - Sync files from current directory to SFTP using lftp
 
 if [ $# -eq 0 ] ; then
-  echo "Usage: $0 [-p|--password password] user@host [remotedir]" >&2
+  echo "Usage: $0 [options] user@host [remotedir]\n" >&2
+  echo "Options:" >&2
+  echo "         -p, --password password" >&2
+  echo "             Set user password\n" >&2
+  echo "         -e, --exclude local/path" >&2
+  echo "              Exclude local path, can be used multiple times" >&2
   exit 1
 fi
 
-ARGS=$(getopt -l 'password' -o 'p:' -- "$@" 2> /dev/null)
+ARGS=$(getopt -l 'password,exclude' -o 'p:,e:' -- "$@" 2> /dev/null)
 eval set -- "$ARGS"
 
 sourcedir=`pwd`
 remotedir="/"
-exclude="" # todo - add to options
+exclude=""
 
 user=
 host=
@@ -23,6 +28,9 @@ do
     case "$1" in
     --password | -p)
         password="$2"
+        shift;;
+    --exclude | -e)
+        exclude="$exclude --exclude $2"
         shift;;
     --)
         shift
@@ -45,7 +53,7 @@ cd $remotedir;
 mirror --reverse \
        --delete \
        --verbose \
-       --ignore-time"
-       # todo --exclude-glob local/path"
+       --ignore-time \
+       $exclude"
 
 exit 0
