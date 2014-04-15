@@ -37,7 +37,7 @@ do
         shift;;
     --ssh | -s)
         ssh=1
-        shift;;
+        ;;
     --)
         shift
         break
